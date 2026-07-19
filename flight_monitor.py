@@ -125,10 +125,10 @@ def main():
     alert_triggered = False
     alert_message = ""
     
-    if best_price_overall < 1500:
+    if True:
         alert_triggered = True
         link = f"https://www.kayak.com.br/flights/{ORIGEM}-{DESTINO}/{best_combination[0]}/{best_combination[1]}?sort=price_a"
-        alert_message = f"ALERTA: Passagem para Floripa encontrada por R$ {best_price_overall}! Abaixo de R$ 1500.\nDatas: {best_combination[0]} a {best_combination[1]}\n\U0001f517 Link Direto: {link}"
+        alert_message = f"ALERTA: Passagem para Floripa encontrada por R$ {best_price_overall}!\nDatas: {best_combination[0]} a {best_combination[1]}\n\U0001f517 Link Direto: {link}"
     elif last_average and best_price_overall <= (last_average * 0.85):
         alert_triggered = True
         link = f"https://www.kayak.com.br/flights/{ORIGEM}-{DESTINO}/{best_combination[0]}/{best_combination[1]}?sort=price_a"
