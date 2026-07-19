@@ -1,0 +1,29 @@
+{
+    "history": [
+        {
+            "timestamp": "2026-07-18T23:35:23.048957",
+            "outbound_date": "2026-12-28",
+            "return_date": "2027-01-03",
+            "price": 1024.0
+        },
+        {
+            "timestamp": "2026-07-18T23:48:24.454773",
+            "outbound_date": "2026-12-28",
+            "return_date": "2027-01-04",
+            "price": 766.0
+        },
+        {
+            "timestamp": "2026-07-18T23:53:45.075737",
+            "outbound_date": "2026-12-26",
+            "return_date": "2027-01-02",
+            "price": 1287.0
+        },
+        {
+            "timestamp": "2026-07-19T00:25:09.460916",
+            "outbound_date": "2026-12-27",
+            "return_date": "2027-01-03",
+            "price": 1693.0
+        }
+    ],
+    "last_average": 1192.5
+}
