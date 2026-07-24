@@ -1,12 +1,14 @@
 import json
 import os
 import sys
+import time
+import random
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 
 DATA_FILE = "data/precos_floripa.json"
-TELEGRAM_TOKEN = "8978380483:AAE_CMYT82yYCvKBmuVdYCcW1Yx0QPaS0BI"
-TELEGRAM_CHAT_ID = "@monitorfloripa"
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "@monitorfloripa")
 
 # Datas de Ida e Volta
 IDA_DATES = ["2026-12-25", "2026-12-26", "2026-12-27"]
@@ -15,7 +17,7 @@ ORIGEM = "SAO"
 DESTINO = "FLN"
 
 def send_webhook_alert(message):
-    print(f"ALERTA: {message}")
+    print("ALERTA: Enviando mensagem para o Telegram...")
     import requests
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {
@@ -43,12 +45,16 @@ def get_cheapest_flight(page, ida, volta):
     # Usando o Kayak como exemplo
     url = f"https://www.kayak.com.br/flights/{ORIGEM}-{DESTINO}/{ida}/{volta}?sort=price_a"
     print(f"Buscando voos para ida {ida} e volta {volta}...")
+    
+    # Adicionando um pequeno atraso aleatorio para evitar bloqueios do Kayak
+    time.sleep(random.uniform(3, 7))
+    
     page.goto(url, wait_until="domcontentloaded")
     
-    # Kayak demora a carregar os pre\u00e7os, vamos esperar o grid principal
+    # Kayak demora a carregar os preços, vamos esperar o grid principal
     try:
-        # Espera at\u00e9 15 segundos pelos resultados aparecerem
-        page.wait_for_selector('div[class*="price-text"]', timeout=15000)
+        # Espera até 30 segundos pelos resultados aparecerem
+        page.wait_for_selector('div[class*="price-text"]', timeout=30000)
         
         # Pega todos os pre\u00e7os da p\u00e1gina
         prices_elements = page.query_selector_all('div[class*="price-text"]')
@@ -136,6 +142,18 @@ def main():
         
     if alert_triggered:
         send_webhook_alert(alert_message)
+        data["last_status_date"] = datetime.now().strftime("%Y-%m-%d")
+        save_data(data)
+    else:
+        # Verifica se ja enviamos o status diario hoje
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        last_status = data.get("last_status_date")
+        if last_status != today_str:
+            link = f"https://www.kayak.com.br/flights/{ORIGEM}-{DESTINO}/{best_combination[0]}/{best_combination[1]}?sort=price_a"
+            status_msg = f"📊 STATUS DIÁRIO: O robô está rodando normalmente.\nNenhuma promoção encontrada no momento.\nMenor preço geral: R$ {best_price_overall}\nDatas: {best_combination[0]} a {best_combination[1]}\n🔗 Link: {link}"
+            send_webhook_alert(status_msg)
+            data["last_status_date"] = today_str
+            save_data(data)
 
 if __name__ == "__main__":
     main()

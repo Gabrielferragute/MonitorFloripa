@@ -32,6 +32,9 @@ jobs:
         python -m playwright install --with-deps chromium
         
     - name: Run flight monitor script
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python flight_monitor.py
       
     - name: Commit data changes
