@@ -5,6 +5,9 @@ import time
 import random
 from datetime import datetime
 from playwright.sync_api import sync_playwright
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DATA_FILE = "data/precos_floripa.json"
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
