@@ -1799,8 +1799,14 @@
             "outbound_date": "2026-12-27",
             "return_date": "2027-01-03",
             "price": 2152.0
+        },
+        {
+            "timestamp": "2026-10-04T09:32:02.048601",
+            "outbound_date": "2026-12-27",
+            "return_date": "2027-01-03",
+            "price": 2140.0
         }
     ],
-    "last_average": 2206.7,
-    "last_status_date": "2026-10-03"
+    "last_average": 2250.6,
+    "last_status_date": "2026-10-04"
 }
